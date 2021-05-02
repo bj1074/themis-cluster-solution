@@ -1,0 +1,39 @@
+#################################################################
+# Application Images.
+#################################################################
+image:
+  #repository: dockercentral.it.att.com:5100/com.att.research.ran/commscope/onecell
+  ipFinderClient:
+    repository: oc5g-docker-prod-suwanee.binaryrepo-east.arrisi.com/
+    imagename: ipfinderclient
+    version: v1.2
+  prometheus:
+    repository:
+    imagename: prom/prometheus
+    version: v2.4.3
+  thanos:
+    repository: quay.io/
+    imagename: thanos/thanos
+    version: v0.18.0
+  nodeExporter:
+    repository: quay.io/
+    imagename: prometheus/node-exporter
+    version: latest
+  kubeStateMetrics:
+    repository: quay.io/
+    imagename: mxinden/kube-state-metrics
+    version: v1.4.0-gzip.3
+  addonResizer:
+    repository: k8s.gcr.io/
+    imagename: addon-resizer
+    version: 1.8.3
+
+
+ip:
+  cluster: 10.53.198.173
+  server: 10.53.198.173
+
+prometheus-api-store:
+  nodePort: 30007
+prometheus-api-grpc:
+  nodePort: 30006

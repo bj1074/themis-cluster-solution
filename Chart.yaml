@@ -1,0 +1,10 @@
+apiVersion: v2
+appVersion: 1.16.0
+description: A Helm chart for Kubernetes
+name: metrics-monitoring
+type: application
+<<<<<<< HEAD
+version: 0.19.0
+=======
+version: 0.18.0
+>>>>>>> 20b58c538706d81c8a9a4a1f80bf316ebb21bb85

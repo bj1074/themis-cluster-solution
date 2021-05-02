@@ -1,0 +1,104 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: node-exporter
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: node-exporter
+spec:
+  selector:
+    matchLabels:
+      app: node-exporter
+  template:
+    metadata:
+      labels:
+        app: node-exporter
+      annotations:
+         prometheus.io/scrape: "true"
+         prometheus.io/port: "9100"
+    spec:
+      hostPID: true
+      hostIPC: true
+      hostNetwork: true
+      containers:
+        - name: node-exporter
+<<<<<<< HEAD
+          image:  {{ .Values.image.nodeExporter.repository }}{{ .Values.image.nodeExporter.imagename }}:{{ .Values.image.nodeExporter.version }}
+=======
+          image:  {{ .Values.nodeexporter.image }}
+>>>>>>> 20b58c538706d81c8a9a4a1f80bf316ebb21bb85
+          securityContext:
+            privileged: true
+          args:
+            - --path.procfs=/host/proc
+            - --path.sysfs=/host/sys
+          ports:
+            - containerPort: 9100
+              protocol: TCP
+          resources:
+            limits:
+<<<<<<< HEAD
+              cpu: {{ .Values.resources.nodeexporter.limits.cpu }}
+              memory: {{ .Values.resources.nodeexporter.limits.memory }}
+            requests:
+              cpu: {{ .Values.resources.nodeexporter.requests.cpu }}
+              memory: {{ .Values.resources.nodeexporter.requests.memory }}
+=======
+              cpu: {{ .Values.nodeexporter.resources.limits.cpu }}
+              memory: {{ .Values.nodeexporter.resources.limits.memory }}
+            requests:
+              cpu: {{ .Values.nodeexporter.resources.requests.cpu }}
+              memory: {{ .Values.nodeexporter.resources.requests.memory }}
+>>>>>>> 20b58c538706d81c8a9a4a1f80bf316ebb21bb85
+          volumeMounts:
+            - name: dev
+              mountPath: /host/dev
+            - name: proc
+              mountPath: /host/proc
+            - name: sys
+              mountPath: /host/sys
+            - name: rootfs
+              mountPath: /rootfs
+      initContainers:
+        - name: client-ipfinder
+          image: {{ .Values.image.ipFinderClient.repository }}{{ .Values.image.ipFinderClient.imagename }}:{{ .Values.image.ipFinderClient.version }}
+          env:
+          - name: "IP_ADDRESS"
+            value: {{ .Values.ip.cluster }}
+          - name: "SERVER_IP_ADDRESS"
+            value: {{ .Values.ip.server }}
+ 
+      volumes:
+        - name: proc
+          hostPath:
+            path: /proc
+        - name: dev
+          hostPath:
+            path: /dev
+        - name: sys
+          hostPath:
+            path: /sys
+        - name: rootfs
+          hostPath:
+            path: /
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9100"
+  labels:
+    name: node-exporter-api
+  name: node-exporter-api
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    app: node-exporter
+  ports:
+  - name: http
+    protocol: TCP
+    port: 9100
+    targetPort: 9100

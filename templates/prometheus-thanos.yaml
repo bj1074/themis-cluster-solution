@@ -1,0 +1,143 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: {{ .Values.storageclass.name }}
+  namespace: {{ .Values.namespace }}
+provisioner: kubernetes.io/no-provisioner
+allowVolumeExpansion: true
+mountOptions:
+  - debug
+volumeBindingMode: Immediate
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: prom-pv
+  namespace: {{ .Values.namespace }}
+  labels:
+    type: local
+spec:
+  accessModes: [ "ReadWriteOnce" ]
+  storageClassName: {{ .Values.storageclass.name }}
+  capacity:
+    storage: {{ .Values.storageclass.capacity }}
+  persistentVolumeReclaimPolicy: Recycle
+  claimRef:
+    namespace: {{ .Values.namespace }}
+    name: prom-pvc-claim
+  hostPath:
+    path: {{ .Values.storageclass.hostpath }}
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: prom-pvc-claim
+  namespace: {{ .Values.namespace }}
+spec:
+  storageClassName: {{ .Values.storageclass.name }}
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.storageclass.resources.requests.storage }}
+---
+
+
+apiVersion: apps/v1 
+kind: StatefulSet
+metadata:
+  name: prometheus
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus
+  serviceName: prometheus-service
+  template:
+    metadata:
+      labels:
+        app: prometheus
+        thanos-store-api: "true"
+    spec:
+      serviceAccountName: monitoring
+      containers:
+        - name: prometheus 
+<<<<<<< HEAD:templates/prometheus-thanos.yaml
+          image: {{ .Values.image.prometheus.repository }}{{ .Values.image.prometheus.imagename }}:{{ .Values.image.prometheus.version }}
+=======
+          image: {{ .Values.statefulset.prometheus.image }}
+>>>>>>> 20b58c538706d81c8a9a4a1f80bf316ebb21bb85:templates/statefulset.yaml
+          args:
+            - "--config.file=/etc/prometheus-shared/prometheus.yaml"
+            - "--storage.tsdb.path=/prometheus/"
+            - "--web.enable-lifecycle"
+            - "--storage.tsdb.no-lockfile"
+            - "--storage.tsdb.min-block-duration=2h"
+            - "--storage.tsdb.max-block-duration=2h"
+            - "--storage.tsdb.retention.time=6h"
+          ports:
+            - name: prometheus
+              containerPort: 9090
+          volumeMounts:
+            - name: prometheus-storage
+              mountPath: /prometheus/
+            - name: prometheus-config-shared
+              mountPath: /etc/prometheus-shared/
+        - name: thanos
+<<<<<<< HEAD:templates/prometheus-thanos.yaml
+          image: {{ .Values.image.thanos.repository }}{{ .Values.image.thanos.imagename }}:{{ .Values.image.thanos.version }}
+=======
+          image: {{ .Values.statefulset.thanos.image }}
+>>>>>>> 20b58c538706d81c8a9a4a1f80bf316ebb21bb85:templates/statefulset.yaml
+          args:
+            - "sidecar"
+            - "--log.level=debug"
+            - "--tsdb.path=/prometheus"
+            - "--prometheus.url=http://localhost:9090"
+            - "--reloader.config-file=/etc/prometheus/prometheus.yaml.tmpl"
+            - "--reloader.config-envsubst-file=/etc/prometheus-shared/prometheus.yaml"
+            - "--objstore.config={type: S3, config: {bucket: themis-bucket,access_key: minioadmin,secret_key: minioadmin,endpoint: 10.53.198.173:9000,insecure: true}}"
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+          ports:
+            - name: http-sidecar
+              containerPort: 10902
+            - name: grpc
+              containerPort: 10901
+          livenessProbe:
+              httpGet:
+                port: 10902
+                path: /-/healthy
+          readinessProbe:
+            httpGet:
+              port: 10902
+              path: /-/ready
+          volumeMounts:
+            - name: prometheus-storage
+              mountPath: /prometheus
+            - name: prometheus-config-shared
+              mountPath: /etc/prometheus-shared/
+            - name: prometheus-config
+              mountPath: /etc/prometheus
+      securityContext:
+        fsGroup: 0
+        runAsNonRoot: false
+        runAsUser: 0
+        
+
+      volumes:
+        - name: prometheus-config
+          configMap:
+            defaultMode: 420
+            name: prometheus-server-conf
+        - name: prometheus-config-shared
+          emptyDir: {}
+        - name: prometheus-storage
+          persistentVolumeClaim:
+            claimName: prom-pvc-claim
