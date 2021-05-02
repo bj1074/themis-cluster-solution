@@ -11,7 +11,7 @@ data:
       scrape_interval: {{ .Values.scrape_interval }}
       evaluation_interval: {{ .Values.evaluation_interval }}
       external_labels:
-        cluster: {{ .Values.clustername }}
+        cluster: {{ .Values.clusterInfo }}
         # Each Prometheus has to have unique labels.
         replica: $(POD_NAME)
 

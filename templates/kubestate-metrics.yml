@@ -109,11 +109,7 @@ spec:
       serviceAccountName: kube-state-metrics
       containers:
       - name: kube-state-metrics
-<<<<<<< HEAD
         image: {{ .Values.image.kubeStateMetrics.repository }}{{ .Values.image.kubeStateMetrics.imagename }}:{{ .Values.image.kubeStateMetrics.version }}
-=======
-        image: {{ .Values.kubestatemetrics.image }}
->>>>>>> 20b58c538706d81c8a9a4a1f80bf316ebb21bb85
         ports:
         - name: http-metrics
           containerPort: 8080
@@ -126,7 +122,6 @@ spec:
           initialDelaySeconds: 5
           timeoutSeconds: 5
       - name: addon-resizer
-<<<<<<< HEAD
         image: {{ .Values.image.addonResizer.repository }}{{ .Values.image.addonResizer.imagename }}:{{ .Values.image.addonResizer.version }}
         resources:
           limits:
@@ -135,16 +130,6 @@ spec:
           requests:
             cpu: {{ .Values.resources.kubestatemetrics.requests.cpu }}
             memory: {{ .Values.resources.kubestatemetrics.requests.memory }}
-=======
-        image: {{ .Values.kubestatemetrics.addonresizer.image }}
-        resources:
-          limits:
-            cpu: {{ .Values.kubestatemetrics.resources.limits.cpu }}
-            memory: {{ .Values.kubestatemetrics.resources.limits.memory }}
-          requests:
-            cpu: {{ .Values.kubestatemetrics.resources.requests.cpu }}
-            memory: {{ .Values.kubestatemetrics.resources.requests.memory }}
->>>>>>> 20b58c538706d81c8a9a4a1f80bf316ebb21bb85
         env:
           - name: MY_POD_NAME
             valueFrom:

@@ -28,6 +28,7 @@ image:
     imagename: addon-resizer
     version: 1.8.3
 
+clsuterInfo: default
 
 ip:
   cluster: 10.53.198.173
@@ -37,3 +38,11 @@ prometheus-api-store:
   nodePort: 30007
 prometheus-api-grpc:
   nodePort: 30006
+
+minio:
+  buckettype: S3
+  bucketname: themis-bucket
+  access_key: minioadmin
+  secret_key: minioadmin
+  endpoint: 10.53.198.190:30012
+  insecure: true

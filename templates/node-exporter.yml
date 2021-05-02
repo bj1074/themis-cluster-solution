@@ -22,11 +22,7 @@ spec:
       hostNetwork: true
       containers:
         - name: node-exporter
-<<<<<<< HEAD
           image:  {{ .Values.image.nodeExporter.repository }}{{ .Values.image.nodeExporter.imagename }}:{{ .Values.image.nodeExporter.version }}
-=======
-          image:  {{ .Values.nodeexporter.image }}
->>>>>>> 20b58c538706d81c8a9a4a1f80bf316ebb21bb85
           securityContext:
             privileged: true
           args:
@@ -37,19 +33,11 @@ spec:
               protocol: TCP
           resources:
             limits:
-<<<<<<< HEAD
               cpu: {{ .Values.resources.nodeexporter.limits.cpu }}
               memory: {{ .Values.resources.nodeexporter.limits.memory }}
             requests:
               cpu: {{ .Values.resources.nodeexporter.requests.cpu }}
               memory: {{ .Values.resources.nodeexporter.requests.memory }}
-=======
-              cpu: {{ .Values.nodeexporter.resources.limits.cpu }}
-              memory: {{ .Values.nodeexporter.resources.limits.memory }}
-            requests:
-              cpu: {{ .Values.nodeexporter.resources.requests.cpu }}
-              memory: {{ .Values.nodeexporter.resources.requests.memory }}
->>>>>>> 20b58c538706d81c8a9a4a1f80bf316ebb21bb85
           volumeMounts:
             - name: dev
               mountPath: /host/dev

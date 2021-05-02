@@ -1,7 +1,7 @@
-<<<<<<< HEAD
 appName: clustername
 imageVersion:
 namespace: monitoring
+clsuterInfo: default
 
 #################################################################
 # Application Images.
@@ -45,42 +45,19 @@ environment:
 
 resources:
   nodeexporter:
-=======
-# Default values for metrics-monitoring.
-scrape_interval: 10s
-evaluation_interval: 10s
-scrape_timeout: 10s
-namespace: monitoring
-clsutername: clustername
-nodeexporter:
-  targets: ['localhost:9100']
-  image: quay.io/prometheus/node-exporter:latest
-  resources:
->>>>>>> 20b58c538706d81c8a9a4a1f80bf316ebb21bb85
     limits:
       cpu: 100m
       memory: 100Mi
     requests:
       cpu: 10m
       memory: 100Mi
-<<<<<<< HEAD
   kubestatemetrics:
-=======
-kubestatemetrics:
-  targets: ['localhost:8080']
-  image: quay.io/mxinden/kube-state-metrics:v1.4.0-gzip.3
-  addonresizer:
-    image: k8s.gcr.io/addon-resizer:1.8.3
-  resources:
->>>>>>> 20b58c538706d81c8a9a4a1f80bf316ebb21bb85
     limits:
       cpu: 150m
       memory: 50Mi
     requests:
       cpu: 150m
       memory: 50Mi
-<<<<<<< HEAD
-
 storageclass:
   name: manual
   capacity: 20Gi
@@ -92,17 +69,11 @@ prometheusstore:
   nodePort: 30007
 prometheusgrpc:
   nodePort: 30006
-=======
-storageclass:
-  name: manual
-  capacity: 20Gi
-  hostpath: "/home/airvana/deeraj/"
-  resources:
-    requests:
-      storage: 3Gi
-statefulset:
-  prometheus:
-    image: prom/prometheus:v2.4.3
-  thanos:
-    image: quay.io/thanos/thanos:v0.8.0
->>>>>>> 20b58c538706d81c8a9a4a1f80bf316ebb21bb85
+
+minio:
+  buckettype: S3
+  bucketname: themis-bucket
+  access_key: minioadmin
+  secret_key: minioadmin
+  endpoint: 10.53.198.190:30012
+  insecure: true

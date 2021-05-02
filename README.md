@@ -13,12 +13,12 @@ Give Cluster Name in values yaml
 evaluation_interval: 10s
 scrape_interval: 10s
 scrape_timeout: 10s
-clustername: yourclustername
+clusterInfo: yourclusterdetails
 
 
 ## Helm Chart installation
 
 ```
-helm install metrics-monitoring-<version>.tgz --generate-name --set clustername=<your clustername>
+helm install metrics-monitoring-<version>.tgz --generate-name --set clusterInfo=<your clustername>
 ```
 

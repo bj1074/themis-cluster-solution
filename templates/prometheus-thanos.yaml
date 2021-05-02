@@ -64,12 +64,8 @@ spec:
     spec:
       serviceAccountName: monitoring
       containers:
-        - name: prometheus 
-<<<<<<< HEAD:templates/prometheus-thanos.yaml
+        - name: prometheus
           image: {{ .Values.image.prometheus.repository }}{{ .Values.image.prometheus.imagename }}:{{ .Values.image.prometheus.version }}
-=======
-          image: {{ .Values.statefulset.prometheus.image }}
->>>>>>> 20b58c538706d81c8a9a4a1f80bf316ebb21bb85:templates/statefulset.yaml
           args:
             - "--config.file=/etc/prometheus-shared/prometheus.yaml"
             - "--storage.tsdb.path=/prometheus/"
@@ -87,11 +83,7 @@ spec:
             - name: prometheus-config-shared
               mountPath: /etc/prometheus-shared/
         - name: thanos
-<<<<<<< HEAD:templates/prometheus-thanos.yaml
           image: {{ .Values.image.thanos.repository }}{{ .Values.image.thanos.imagename }}:{{ .Values.image.thanos.version }}
-=======
-          image: {{ .Values.statefulset.thanos.image }}
->>>>>>> 20b58c538706d81c8a9a4a1f80bf316ebb21bb85:templates/statefulset.yaml
           args:
             - "sidecar"
             - "--log.level=debug"
@@ -99,7 +91,7 @@ spec:
             - "--prometheus.url=http://localhost:9090"
             - "--reloader.config-file=/etc/prometheus/prometheus.yaml.tmpl"
             - "--reloader.config-envsubst-file=/etc/prometheus-shared/prometheus.yaml"
-            - "--objstore.config={type: S3, config: {bucket: themis-bucket,access_key: minioadmin,secret_key: minioadmin,endpoint: 10.53.198.173:9000,insecure: true}}"
+            - "--objstore.config={type: {{ .Values.minio.buckettype }}, config: {bucket: {{ .Values.minio.bucketname }},access_key: {{ .Values.minio.access_key }},secret_key: {{ .Values.minio.secret_key }},endpoint: {{ .Values.minio.endpoint }},insecure: {{ .Values.minio.insecure }} }}"
           env:
             - name: POD_NAME
               valueFrom:
