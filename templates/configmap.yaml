@@ -35,7 +35,7 @@ data:
     - job_name: 'node-exporter'
       scrape_interval: {{ .Values.scrape_interval }}
       static_configs:
-        - targets: {{ .Values.nodeexporter.targets }}
+        - targets: ['localhost:9100']
 
 
     - job_name: kubernetes-nodes-cadvisor
@@ -104,7 +104,7 @@ data:
       metrics_path: /metrics
       scheme: http
       static_configs:
-        - targets: {{ .Values.kubestatemetrics.targets }}
+        - targets: ['localhost:8080']
       metric_relabel_configs:
         - target_label: cluster
      

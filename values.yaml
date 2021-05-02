@@ -35,8 +35,8 @@ image:
 
 
 ip:
-  cluster: 10.53.198.173
-  server: 10.53.198.173
+  cluster: 10.53.198.176
+  server: 10.53.198.190
 
 environment:
   scrape_interval: 10s

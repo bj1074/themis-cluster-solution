@@ -47,14 +47,6 @@ spec:
               mountPath: /host/sys
             - name: rootfs
               mountPath: /rootfs
-      initContainers:
-        - name: client-ipfinder
-          image: {{ .Values.image.ipFinderClient.repository }}{{ .Values.image.ipFinderClient.imagename }}:{{ .Values.image.ipFinderClient.version }}
-          env:
-          - name: "IP_ADDRESS"
-            value: {{ .Values.ip.cluster }}
-          - name: "SERVER_IP_ADDRESS"
-            value: {{ .Values.ip.server }}
  
       volumes:
         - name: proc
