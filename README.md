@@ -10,15 +10,12 @@ Metrics monitoring
 
 Give Cluster Name in values yaml 
 ## Example:
-evaluation_interval: 10s
-scrape_interval: 10s
-scrape_timeout: 10s
-clusterInfo: yourclusterdetails
+clusterInfo:edgecluster <your cluster label>
 
 
 ## Helm Chart installation
 
 ```
-helm install metrics-monitoring-<version>.tgz --generate-name --set clusterInfo=<your clustername>
+helm install metrics-monitoring-<version>.tgz --generate-name --set clusterInfo=<your clustername> --set ip.cluster=<your cluster ip address> --set ip.server=<central cluster ip>
 ```
 

@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: Service
+metadata: 
+  name: prometheus-0-service
+  annotations: 
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9090"
+  namespace: {{ .Values.namespace }}
+  labels:
+    name: prometheus
+spec:
+  selector: 
+    statefulset.kubernetes.io/pod-name: prometheus-0
+  ports: 
+    - name: prometheus 
+      port: 8080
+      targetPort: prometheus
+
+---
+#This service creates a srv record for querier to find about store-api's
+apiVersion: v1
+kind: Service
+metadata:
+  name: thanos-store-gateway
+  namespace: {{ .Values.namespace }}
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - name: grpc
+      port: 10901
+      targetPort: grpc
+  selector:
+    thanos-store-api: "true"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: prometheus-api-grpc
+  name: prometheus-api-grpc
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    statefulset.kubernetes.io/pod-name: prometheus-0
+  type: NodePort
+  ports:
+  - name: grpc
+    port: 10901
+    targetPort: grpc
+    nodePort: {{ .Values.prometheusgrpc.nodePort }}
+    protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: prometheus-api-store
+  name: prometheus-api-store
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    statefulset.kubernetes.io/pod-name: prometheus-0
+  type: NodePort
+  ports:
+  - name: http
+    port: 9090
+    targetPort: 9090
+    nodePort: {{ .Values.prometheusstore.nodePort }}
+    protocol: TCP
+---
