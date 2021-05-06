@@ -1,4 +1,4 @@
-appName: clustername
+appName: themis-cluster-solution
 imageVersion:
 namespace: monitoring
 clsuterInfo: default
@@ -15,7 +15,7 @@ image:
   prometheus:
     repository:
     imagename: prom/prometheus
-    version: v2.4.3
+    version: latest
   thanos:
     repository: quay.io/
     imagename: thanos/thanos

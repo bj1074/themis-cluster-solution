@@ -10,7 +10,7 @@ image:
   prometheus:
     repository:
     imagename: prom/prometheus
-    version: v2.4.3
+    version: latest
   thanos:
     repository: quay.io/
     imagename: thanos/thanos

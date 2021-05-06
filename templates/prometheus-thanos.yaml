@@ -116,8 +116,8 @@ spec:
                 path: /-/healthy
           readinessProbe:
             httpGet:
-              port: 10902
-              path: /-/ready
+              port: 30009
+              path: 10.53.198.190
           volumeMounts:
             - name: prometheus-storage
               mountPath: /prometheus
